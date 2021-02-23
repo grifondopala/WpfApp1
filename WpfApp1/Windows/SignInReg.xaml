@@ -1,0 +1,569 @@
+﻿<Window x:Class="WpfApp1.SignInReg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="530" Width="370"
+        ResizeMode="NoResize"
+        Background="#2F2E33"
+        Loaded="MainWindow_Loaded">
+
+    <Window.Resources>
+
+        <SolidColorBrush x:Key="Color1">#3A5199</SolidColorBrush>
+        <SolidColorBrush x:Key="Color2">#E1F5FE</SolidColorBrush>
+        <SolidColorBrush x:Key="Color3">#0277BD</SolidColorBrush>
+        <SolidColorBrush x:Key="Color4">#2F2E33</SolidColorBrush>
+
+        <!-- Гриды -->
+        
+        <Style x:Key="BottomGrid" TargetType="Grid">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Setter Property="IsEnabled" Value="True"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Process}" Value="Register">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Process}" Value="Login">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="RegistrationGrid" TargetType="Grid">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Process}" Value="Register">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LoginGrid" TargetType="Grid">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Process}" Value="Login">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Кнопки, Надписи -->
+
+        <Style x:Key="WelcomeText" TargetType="TextBlock"><!-- Стиль надписи Welcome -->
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Text" Value="Welcome to the NameApp"/>
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Process}" Value="Register">
+                    <Setter Property="Margin" Value="0,0,0,50"/>
+                    <Setter Property="Text" Value="Registration"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Process}" Value="Login">
+                    <Setter Property="Margin" Value="0,0,0,50"/>
+                    <Setter Property="Text" Value="Sign in"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Process}" Value="Welcome">
+                    <Setter Property="Margin" Value="0,0,0,0"/>
+                    <Setter Property="Text" Value="Welcome to the NameApp"/>
+                </DataTrigger>
+            </Style.Triggers>
+            
+        </Style>
+
+        <Style x:Key="SignUpButton" TargetType="Button"> <!-- Стиль кнопки регистрации -->
+            <Setter Property="Background" Value="{StaticResource Color1}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" 
+                            BorderThickness="0"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter Margin="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource Color2}"/>
+                    <Setter Property="Background" Value="{StaticResource Color3}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LoginText" TargetType="TextBlock"> <!-- Стиль текста логина -->
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Foreground" Value="White"/>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="TextDecorations" Value="Underline"/>
+                </Trigger>
+            </Style.Triggers>
+            
+        </Style>
+
+        <Style x:Key="LoginButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource Color4}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" 
+                            BorderThickness="0"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter Margin="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BackButton" TargetType="Button">
+            <!-- Кнопка назад -->
+            <Setter Property="Background" Value="{StaticResource Color4}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="IsEnabled" Value="True"/>
+            <Setter Property="Visibility" Value="Visible"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" 
+                            BorderThickness="0"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter Margin="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Process}" Value="Welcome">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Поля в гриде регистрации и логина -->
+        
+        <Style x:Key="LoginRegInputStyle" TargetType="TextBox"> <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding LoginProperty}" Value="OK">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LoginRegTextHint" TargetType="TextBlock">
+            <!-- Стиль подсказки над полем ввода информации -->
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Text" Value="Login"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding LoginProperty}" Value="Lenght">
+                    <Setter Property="Text" Value="Login lenght must be in 5 to 16"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding LoginProperty}" Value="WasTaken">
+                    <Setter Property="Text" Value="Login is already taken"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+
+        </Style>
+
+        <Style x:Key="MailRegTextHint" TargetType="TextBlock">
+            <!-- Стиль подсказки над полем ввода информации -->
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Text" Value="Mail"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MailProperty}" Value="Format">
+                    <Setter Property="Text" Value="Incorrect mail's format"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+        </Style>
+
+        <Style x:Key="MailRegInputStyle" TargetType="TextBox">
+            <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MailProperty}" Value="OK">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PasswordRegInputStyle" TargetType="PasswordBox">
+            <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding PasswordProperty}" Value="OK">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PasswordRegTextHint" TargetType="TextBlock">
+            <!-- Стиль подсказки над полем ввода информации -->
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Text" Value="Password"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding PasswordProperty}" Value="Lenght">
+                    <Setter Property="Text" Value="Password lenght isn't in 8 to 24"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding PasswordProperty}" Value="DontMatch">
+                    <Setter Property="Text" Value="Passwords dont match"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+        </Style>
+
+
+        <Style x:Key="PasswordConfirmInputStyle" TargetType="PasswordBox">
+            <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+        </Style>
+
+        <Style x:Key="LoginSignInTextHint" TargetType="TextBlock">
+            <!-- Стиль подсказки над полем ввода информации -->
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Text" Value="Login"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SignInProperty}" Value="UserNotFound">
+                    <Setter Property="Text" Value="This user isn't registred"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LoginSignInInputStyle" TargetType="TextBox">
+            <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SignInProperty}" Value="OK">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SignInProperty}" Value="Password">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PasswordSignInInputStyle" TargetType="PasswordBox">
+            <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SignInProperty}" Value="OK">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SignInProperty}" Value="UserNotFound">
+                    <Setter Property="BorderBrush" Value="{StaticResource Color2}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PasswordSignInTextHint" TargetType="TextBlock">
+            <!-- Стиль подсказки над полем ввода информации -->
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Text" Value="Password"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SignInProperty}" Value="Password">
+                    <Setter Property="Text" Value="Incorrect password"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+        </Style>
+
+
+        <Style x:Key="TextHint" TargetType="TextBlock">
+            <!-- Стиль подсказки над полем ввода информации -->
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Foreground" Value="White"/>
+
+        </Style>
+
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <!-- Стиль поля для ввода информации -->
+            <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+
+    </Window.Resources>
+    
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="TopGrid" 
+              Grid.Row="0" Grid.Column="0"> <!-- Верхний грид с приветствием -->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="30"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="WelcomeText" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2"
+                       Style="{StaticResource WelcomeText}">
+                
+            </TextBlock>
+
+            <Button x:Name="BackButton" Grid.Column="1" Grid.Row="0" Style="{StaticResource BackButton}" Click="ChangeProgress">
+                <Label>
+                    <Image Source="/Images/left-arrow.png" Width="20" Height="20"/>
+                </Label>
+            </Button>
+            
+        </Grid>
+
+        <Grid x:Name="BottomGrid" Style="{StaticResource BottomGrid}"
+              Grid.Row="1" Grid.Column="0"> <!-- Нижний грид с кнопками Sign Up, Login и формами -->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="12*"/>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            
+            <Button x:Name="Register" 
+                    Grid.Row="1" Grid.Column="1" Style="{StaticResource SignUpButton}" Click="ChangeProgress">
+                Sign Up
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" Click="ChangeProgress" Name="Login"
+                    Style="{StaticResource LoginButton}">
+                <Label>
+                    <TextBlock
+                             Style="{StaticResource LoginText}">
+                        I already have an account in the NameApp
+                    </TextBlock>
+                </Label>
+            </Button>
+            
+        </Grid>
+
+
+        <Grid x:Name="RegistrationGrid" Style="{StaticResource RegistrationGrid}"
+              Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <!-- Грид Регистрации -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource LoginRegTextHint}">
+                    
+                </TextBlock>
+                <TextBox x:Name="LoginReg" Grid.Row="1" Style="{StaticResource LoginRegInputStyle}"/>
+            </Grid>
+
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource MailRegTextHint}">
+                    
+                </TextBlock>
+                <TextBox x:Name="MailReg" Grid.Row="1" Style="{StaticResource MailRegInputStyle}"/>
+            </Grid>
+
+            <Grid Grid.Row="5" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource PasswordRegTextHint}">
+
+                </TextBlock>
+                <PasswordBox x:Name="PasswordReg" Grid.Row="1" Style="{StaticResource PasswordRegInputStyle}"/>
+            </Grid>
+
+            <Grid Grid.Row="7" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource TextHint}">
+                    Confirm Password
+                </TextBlock>
+                <PasswordBox x:Name="ConfirmPasswordReg" Grid.Row="1" Style="{StaticResource PasswordConfirmInputStyle}"/>
+            </Grid>
+
+            <Button Style="{StaticResource SignUpButton}" Click="RegisterNewUser"
+                Grid.Column="1" Grid.Row="9">
+                Sign Up!
+            </Button>
+            
+
+        </Grid>
+
+        <Grid x:Name="LoginGrid" Style="{StaticResource LoginGrid}"
+              Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource LoginSignInTextHint}">
+                    
+                </TextBlock>
+                <TextBox x:Name="LoginSignIn" Grid.Row="1" Style="{StaticResource LoginSignInInputStyle}"/>
+            </Grid>
+
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Style="{StaticResource PasswordSignInTextHint}">
+                    
+                </TextBlock>
+                <PasswordBox x:Name="PasswordSignIn" Grid.Row="1" Style="{StaticResource PasswordSignInInputStyle}"/>
+            </Grid>
+
+            <Button Style="{StaticResource SignUpButton}"
+                Grid.Column="1" Grid.Row="5" Click="SignIn">
+                Sign In!
+            </Button>
+        </Grid>
+
+
+    </Grid>
+    
+</Window>
